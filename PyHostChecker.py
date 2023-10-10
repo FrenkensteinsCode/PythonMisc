@@ -38,7 +38,7 @@ print(f"-" * 50)
 def ping():
     ''' Pings a target-host for one iteration to see if it's online '''
 
-    param = "-n" # -c for Linux but not allowed on Windows
+    param = "-n" if platform.system() == "Windows" else "-c"
     cmd = ["ping", param, "1", target]
 
     HOST_UP = True if subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0 else False
