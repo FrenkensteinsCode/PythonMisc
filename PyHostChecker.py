@@ -35,19 +35,27 @@ print(f"Scanning started at: " + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"
 print(f"-" * 50)
 
 # Ping logic
-def ping(target):
-    param = "-n"
+def ping():
+    ''' Pings a target-host for one iteration to see if it's online '''
+
+    param = "-n" # -c for Linux but not allowed on Windows
     cmd = ["ping", param, "1", target]
 
     HOST_UP = True if subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0 else False
 
     if (HOST_UP == True):
-        print(f"{target} seems to be up and running")
+        print(f"{target} seems to be up and running \u2705")
     else:
-        print(f"{target} seems to be down")
+        print(f"{target} seems to be down \u274C")
 
 # Port scan logic
 def port_scan(port):
+    ''' Scans open ports on target-host to see if they're open 
+    
+        Input:
+            port: Port to be checked against
+    '''
+
     try:
         s = socket.socket()
         s.connect((target,port))
@@ -80,5 +88,11 @@ def scan(ports):
         q.put(worker)
     q.join()
 
-ping(target)
-scan(ports)
+
+def main():
+    ping()
+    scan(ports)
+
+if __name__ == "__main__":
+    main()
+
