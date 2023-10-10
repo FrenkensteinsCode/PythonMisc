@@ -1,5 +1,6 @@
 from colorama import init, Fore
 from datetime import datetime
+import platform
 import pyfiglet
 from queue import Queue
 import socket
