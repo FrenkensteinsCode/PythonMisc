@@ -24,10 +24,12 @@ print_lock = Lock()
 target = input("Hostname/IP: ")
 port_range = input("Port-Range: ")
 
-start_p, end_p = port_range.split("-")
-start_p, end_p = int(start_p), int(end_p)
+if ("-" not in port_range):
+    start_p = end_p = int(port_range)
+else:
+    start_p, end_p = map(int, port_range.split("-"))
 
-ports = [ p for p in range(start_p, end_p)]
+ports = [p for p in range(start_p, end_p + 1)]
 
 # Info
 print(f"-" * 50)
