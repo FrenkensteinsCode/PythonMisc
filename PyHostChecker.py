@@ -23,6 +23,7 @@ print_lock = Lock()
 
 # DNS lookup helper functions
 def get_domain_name(ip_address):
+    ''' Reverse DNS lookup '''
     try:
         hostname = socket.gethostbyaddr(ip_address)[0]
         return hostname
@@ -30,6 +31,7 @@ def get_domain_name(ip_address):
         return "No DNS entry found!"
     
 def get_ip_address(hostname):
+    ''' Forward DNS lookup '''
     try:
         ip = socket.gethostbyname(hostname)
         return ip
