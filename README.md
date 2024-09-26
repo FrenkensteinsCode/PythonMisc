@@ -14,4 +14,6 @@ Miscellaneous Python scripts serving different purposes
 * You will be prompted to enter a target-host (hostname/ip) and a port-range
 
 #### Considerations
-* This script has been tested using Pythin 3.11.2 so far.
+This script has been tested on the following platforms:
+- Windows 10 (22H2) - Python 3.11.2
+  - WSL (kali-rolling 2024.2) - Python 3.11.8
