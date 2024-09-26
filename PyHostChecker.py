@@ -1,3 +1,4 @@
+
 from colorama import init, Fore
 from datetime import datetime
 import platform
@@ -20,6 +21,21 @@ RESET = Fore.RESET
 q = Queue()
 print_lock = Lock()
 
+# DNS lookup helper functions
+def get_domain_name(ip_address):
+    try:
+        hostname = socket.gethostbyaddr(ip_address)[0]
+        return hostname
+    except socket.herror:
+        return "No DNS entry found!"
+    
+def get_ip_address(hostname):
+    try:
+        ip = socket.gethostbyname(hostname)
+        return ip
+    except socket.herror:
+        return "No DNS entry found!"
+
 # Input
 target = input("Hostname/IP: ")
 port_range = input("Port-Range: ")
@@ -33,7 +49,7 @@ ports = [p for p in range(start_p, end_p + 1)]
 
 # Info
 print(f"-" * 50)
-print(f"Scanning Target: " + target)
+print(f"Scanning Target: " + target + " (" + get_domain_name(target) + " / " + get_ip_address(target) + ")")
 print(f"Scanning started at: " + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
 print(f"-" * 50)
 
@@ -98,4 +114,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
