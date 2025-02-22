@@ -31,6 +31,7 @@ def cpu_benchmark(limit: int):
     return t1 - t0
 
 def exec_cpu_benchmark(limit: int, repeats: int, output_file: str):
+    print(f"*****CPU-BENCHMARK*****")
     list_of_results = []
     with open(output_file, 'w') as f:
         for _ in tqdm(range(repeats), desc="Benchmarking"):
@@ -39,12 +40,11 @@ def exec_cpu_benchmark(limit: int, repeats: int, output_file: str):
         avg = sum(list_of_results) / repeats
 
         f.write(f"*****CPU-BENCHMARK*****\n")
-        f.write(f"Values per run: {list_of_results}\n")
-        f.write(f"Averaged calculation time over {repeats} runs is: {avg:.4f}s\n")
+        f.write(f"Values per run: {list_of_results}\n\n")
+        f.write(f"=> Averaged calculation time over {repeats} runs is: {avg:.4f}s\n\n")
 
-        print(f"*****CPU-BENCHMARK*****")
-        print(f"Averaged calculation time over {repeats} runs is: {avg:.4f}s")
-        print(f"See {output_file} for details.")
+    print(f"Averaged calculation time over {repeats} runs is: {avg:.4f}s")
+    print(f"See {output_file} for details.\n")
 
 ## IO Benchmark
 def write_benchmark(file_name, data_size):
@@ -61,27 +61,34 @@ def read_benchmark(file_name):
     t1 = time.perf_counter()
     return t1 - t0
 
-def exec_io_benchmark(test_file: str, data_size: int, output_file: str):
+def exec_io_benchmark(output_file: str, repeats: int, test_file: str, data_size: int):
+    print(f"*****IO-BENCHMARK*****")
+    list_of_write_results = []
+    list_of_read_results = []
     with open(output_file, 'a') as f:
-        write_time = write_benchmark(test_file, data_size)
-        read_time = read_benchmark(test_file)
-
+        for _ in tqdm(range(repeats), desc="Benchmarking"):
+            write_time = write_benchmark(test_file, data_size)
+            read_time = read_benchmark(test_file)
+            list_of_write_results.append(write_time)
+            list_of_read_results.append(read_time)
+        avg_write = sum(list_of_write_results) / repeats
+        avg_read = sum(list_of_read_results) / repeats
+        
         f.write(f"*****IO-BENCHMARK*****\n")
-        f.write(f"Write: {write_time:.4f}s\n")
-        f.write(f"Read: {read_time:.4f}s")
+        f.write(f"Averaged write time over {repeats} runs is: {avg_write:.4f}s\n")
+        f.write(f"Averaged read time over {repeats} runs is: {avg_read:.4f}s")
 
-        print(f"*****IO-BENCHMARK*****")
-        print(f"Write: {write_time:.4f}s")
-        print(f"Read: {read_time:.4f}s")
+    print(f"Averaged write time over {repeats} runs is: {avg_write:.4f}s")
+    print(f"Averaged read time over {repeats} runs is: {avg_read:.4f}s")
 
-        os.remove(test_file)
+    os.remove(test_file)
 
 if __name__ == "__main__":
-    limit = 10000000  # To which limit should we find prime numbers
-    repeats = 100 # How many runs should we do
+    limit = 100000  # To which limit should we find prime numbers
+    repeats = 10 # How many runs should we do
     data_size = 10**6  # 1 MB
     test_file = "benchmark.txt"
     out_file = "results.txt"
 
     exec_cpu_benchmark(limit, repeats, out_file)
-    exec_io_benchmark(test_file, data_size, out_file)
+    exec_io_benchmark(out_file, repeats, test_file, data_size)
